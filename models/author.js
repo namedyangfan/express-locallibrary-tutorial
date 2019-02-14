@@ -8,7 +8,12 @@ var AuthorSchema = new Schema(
     family_name: {type: String, required: true, max: 100},
     date_of_birth: {type: Date},
     date_of_death: {type: Date},
-    book: [{type: Schema.Types.ObjectId, ref: 'Book'}]
+    book: [{
+      type: Schema.Types.ObjectId, 
+      ref: 'Book',
+      unique : true,
+      dropDups: true
+    }]
   }
 );
 

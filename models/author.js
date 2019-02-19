@@ -11,8 +11,6 @@ var AuthorSchema = new Schema(
     book: [{
       type: Schema.Types.ObjectId, 
       ref: 'Book',
-      unique : true,
-      dropDups: true
     }]
   }
 );

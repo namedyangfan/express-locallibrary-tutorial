@@ -35,7 +35,7 @@ exports.book_create_post = [
 
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/errors messages.
-            res.json({ title: 'Create Book', book: req.query, errors: errors.array() });
+            res.status(500).json({ title: 'Create Book', book: req.query, errors: errors.array() });
             return;
         }
         else {

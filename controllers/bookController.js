@@ -64,22 +64,34 @@ exports.book_create_post = [
 ];
 
 exports.add_author =  [
+  query('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
+  query('book', 'Book must not be empty.').isLength({ min: 1 }).trim(),
+
+  sanitizeParam('*').trim().escape(),
+
   async (req, res, next) => {
-    const authorId = req.query.authorId;
+    const errors = validationResult(req);
+
+    const authorId = req.query.author;
     const author = await Author.findById(authorId);
-    console.log(author)
-
-    const bookId = req.query.bookId;
+    const bookId = req.query.book;
     const book = await Book.findById(bookId);
-    console.log(book)
 
-    book.author.push(author);
-    author.book.push(book);
-    await book.save();
-    await author.save();
 
-    res.json(book)
-    // await Book.findOneAndUpdate({"_id": bookId}, { $push: { author: authorId })
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({ title: 'Add Author', errors: errors.array() });
+      return
+    }
+    else {
+
+      book.author.push(author);
+      author.book.push(book);
+      await book.save();
+      await author.save();
+
+      res.status(200).json(book)
+    }
   }
 ];
 
